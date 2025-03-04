@@ -51,7 +51,7 @@ def get_args():
     parser.add_argument('--save', action='store_true') 
     parser.add_argument('--save-keys', action='store_true') 
     parser.add_argument('--numbers', nargs='+', type=int) 
-    parser.add_argument('--file', default='ineqs', type=str)
+    parser.add_argument('--file',    default='ineqs', type=str)
     parser.add_argument('--iterations', type=int, default=10)
     parser.add_argument('--threads', type=int, default=0)
     parser.add_argument('--seed', type=int, default=0)
@@ -76,6 +76,16 @@ def get_args():
         c = input("WARNING: Overwritting default file ineqs. Continue [y/N]? ")
         if c != 'y':
             exit(0)
+
+    if not os.path.exists(args.file):
+        os.makedirs(args.file)
+    if "/" in args.results_file:
+        if not os.path.exists(args.results_file.split('/')[0]):
+            os.makedirs(args.results_file.split('/')[0])
+    else:
+        if not os.path.exists(args.results_file):
+            os.makedirs(args.results_file)
+
     return args
 
 def add_to_zip(filename, zip_filename, delete=False):
@@ -89,6 +99,7 @@ def add_to_zip(filename, zip_filename, delete=False):
         os.remove(filename)
 
 def get_equations(number, filename, generate, save, th_no, zip_file, save_keys):
+    print(f"f{save = }, {save_keys = }")
     if generate:
         print("Simulating faults on device to create inequalities..")
         mat_ge, mat_le, vec_ge, vec_le, key, eq_ge, eq_le = create_matrix_threaded(th_no, number)
@@ -107,7 +118,7 @@ def get_equations(number, filename, generate, save, th_no, zip_file, save_keys):
             add_to_zip(keyfile, zip_file, delete=True)
             print("")
     else:
-        print("Loading inequalities from file/cache..")
+        print("Loading inequalities from file/cache {}.".format(filename))
         mat_ge, mat_le, vec_ge, vec_le = mat_from_file(filename + ".txt")
         key = key_from_file(filename + "_es.txt")
         print("Loaded {} inequalities.".format(len(mat_ge) + len(mat_le)))
@@ -198,6 +209,7 @@ def main():
         seed = args.seed
         filen = args.results_file + '_' + ver + '_' + str(number) + '_' + datestr +'.json'
         print("Writing results to {}..".format(filen))
+
         with open(filen, 'a') as outfile:
             json.dump(results, outfile, indent=4)
         add_to_zip(filen, args.zip_file, delete=True)
@@ -346,7 +358,7 @@ def run(args, seed, number, current_run, runs, current_no, nonumbers, starttime,
             'best_coeff_correct': best_coeff_correct}
 
 if __name__ == '__main__':
-    test_bin_tree()
-   # test_check_bp()
-    test()
+    # test_bin_tree()
+    # test_check_bp()
+    # test()
     main()

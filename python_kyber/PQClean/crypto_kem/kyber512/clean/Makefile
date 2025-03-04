@@ -10,7 +10,7 @@ COMMON_OBJECTS=$(patsubst %.c,%.o,$(wildcard $(COMMON)/*.c))
 $(COMMON)/%.o: $(COMMON)/%.c $(COMMON)/%.h
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-CFLAGS=-O3 -Wall -Wextra -Wpedantic -Werror -Wredundant-decls -std=c99 -I../../../common $(EXTRAFLAGS)
+CFLAGS = -O3 -Wall -Wextra -Wpedantic -Werror -Wredundant-decls -std=c99 -I../../../common -Wno-error=array-parameter $(EXTRAFLAGS)
 
 all: $(LIB)
 

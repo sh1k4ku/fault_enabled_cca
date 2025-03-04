@@ -9,7 +9,7 @@ name = "python_kyber"
 crate-type = ["cdylib"]
 
 [dependencies.pyo3]
-version = "*"
+version = "0.15"
 
 [features]
 kyber1024 = []

@@ -1,5 +1,10 @@
 # Fault-enabled chosen-ciphertext attacks on Kyber
 
+## comment
+too many bugs...
+
+## start
+
 Code belonging to [Fault-enabled chosen-ciphertext attack on Kyber](https://eprint.iacr.org/2021/1222.pdf).
 
 To run the attack:
@@ -7,6 +12,7 @@ To run the attack:
 1. Create a virtual enviroment .env
 	```
 	$ python3 -m venv .env
+	$ source .env/bin/activate
 	```
 2. Install numpy and scipy
 	```
@@ -27,12 +33,10 @@ To run the attack:
 E.g. 
 
     $ VER=kyber512 source maturin_build.sh
-    $ ./python/main.py --seed 42 --number 6000 --file ineqs/ineqs512 --runs 1 --generate --save-keys --iterations 10 --zip-file test.zip
+	$ mkdir ineqs results
+    $ python ./python/main.py --seed 42 --number 6000 --file ineqs/ineqs512 --runs 1 --generate --save-keys --iterations 10 --zip-file test.zip
 
 Simulates the attack against Kyber512 with 6000 faults/inequalities, 1 run, generating new keys and inequalities, 10 belief propagation iterations, and saving to test.zip.
 
 To also save the generated inequalities, use the --save option. Note that while inequalities are sampled using the seed provided (--seed), the keys are not sampled using the seed. Therefore, saving keys is recommended.
 To reuse keys and inequalities, do not pass --generate.
-
-In case of bugs or technical problems, please contact me (Julius) under the e-mail given in the paper.
-	
